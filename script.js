@@ -185,7 +185,7 @@ class GuestBook {
         // Create notification element
         const notification = document.createElement('div');
         notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg border-3 border-black max-w-sm ${type === 'success' ? 'bg-green-400' :
-                type === 'error' ? 'bg-red-400' : 'bg-cyan-400'
+            type === 'error' ? 'bg-red-400' : 'bg-cyan-400'
             }`;
 
         notification.innerHTML = `
@@ -308,6 +308,10 @@ class CodeEntry {
         // Bind physical keyboard
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('code-entry').classList.contains('hidden')) return;
+
+            // Don't intercept keys when user is typing in form fields
+            const activeTag = document.activeElement.tagName;
+            if (activeTag === 'INPUT' || activeTag === 'TEXTAREA' || activeTag === 'SELECT') return;
 
             const key = e.key;
             if (this.konamiCode.includes(key)) {
