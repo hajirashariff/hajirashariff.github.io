@@ -1,6 +1,6 @@
 // Supabase Configuration
-const SUPABASE_URL = 'https://ivkvadpphxpajnexgmjt.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2a3ZhZHBwaHhwYWpuZXhnbWp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0MzI0MzgsImV4cCI6MjA3NjAwODQzOH0.Hbi7WIUJCOzvsxAq9O4peeQd-ghyPEEFPfi4NMtWMrM';
+const SUPABASE_URL = 'https://igoyibkpphrlipfofxjm.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlnb3lpYmtwcGhybGlwZm9meGptIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1MDcxNDMsImV4cCI6MjA4NzA4MzE0M30.boZ9zGQ78ryyOC-VaWASmAmIBVMlvLj7nRSz-GlrVPI';
 
 // Initialize Supabase client
 const { createClient } = supabase;
@@ -26,10 +26,10 @@ class GuestBook {
 
     async handleSubmit(e) {
         e.preventDefault();
-        
+
         const submitBtn = e.target.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
+
         try {
             // Show loading state
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>[SUBMITTING...]';
@@ -63,10 +63,10 @@ class GuestBook {
 
             // Show success message
             this.showNotification('Message submitted successfully!', 'success');
-            
+
             // Reset form
             document.getElementById('guestbook-form').reset();
-            
+
             // Reload messages
             await this.loadMessages();
 
@@ -75,14 +75,14 @@ class GuestBook {
             console.error('Error details:', error.message);
             console.error('Supabase URL:', SUPABASE_URL);
             console.error('Supabase Key:', SUPABASE_ANON_KEY ? 'Present' : 'Missing');
-            
+
             // Check for common database errors
-            if (error.message.includes('relation "public.guestbook" does not exist') || 
+            if (error.message.includes('relation "public.guestbook" does not exist') ||
                 error.message.includes('does not exist')) {
                 this.showNotification('⚠️ Database setup required! Please create the guestbook table in your Supabase dashboard.', 'error');
                 this.showDatabaseInstructions();
-            } else if (error.message.includes('permission denied') || 
-                       error.message.includes('insufficient_privilege')) {
+            } else if (error.message.includes('permission denied') ||
+                error.message.includes('insufficient_privilege')) {
                 this.showNotification('⚠️ Permission error! Please check your database policies.', 'error');
             } else {
                 this.showNotification(`Failed to submit message: ${error.message}`, 'error');
@@ -142,7 +142,7 @@ class GuestBook {
         messages.forEach(message => {
             const messageEl = document.createElement('div');
             messageEl.className = 'retro-window p-4 mb-4';
-            
+
             const date = new Date(message.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
@@ -184,11 +184,10 @@ class GuestBook {
     showNotification(message, type = 'info') {
         // Create notification element
         const notification = document.createElement('div');
-        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg border-3 border-black max-w-sm ${
-            type === 'success' ? 'bg-green-400' : 
-            type === 'error' ? 'bg-red-400' : 'bg-cyan-400'
-        }`;
-        
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg border-3 border-black max-w-sm ${type === 'success' ? 'bg-green-400' :
+                type === 'error' ? 'bg-red-400' : 'bg-cyan-400'
+            }`;
+
         notification.innerHTML = `
             <div class="flex items-center">
                 <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
@@ -274,7 +273,7 @@ CREATE POLICY "Allow public insert access"
                 </div>
             </div>
         `;
-        
+
         document.body.appendChild(modal);
     }
 }
@@ -287,7 +286,7 @@ class CodeEntry {
         this.attemptCount = 0;
         this.init();
     }
-    
+
     init() {
         this.bindEvents();
         // Hide the dragon quiz header initially
@@ -296,7 +295,7 @@ class CodeEntry {
             header.classList.add('hidden');
         }
     }
-    
+
     bindEvents() {
         // Bind on-screen keyboard buttons
         document.querySelectorAll('.key-btn').forEach(btn => {
@@ -305,11 +304,11 @@ class CodeEntry {
                 this.addKey(key);
             });
         });
-        
+
         // Bind physical keyboard
         document.addEventListener('keydown', (e) => {
             if (document.getElementById('code-entry').classList.contains('hidden')) return;
-            
+
             const key = e.key;
             if (this.konamiCode.includes(key)) {
                 e.preventDefault();
@@ -317,11 +316,11 @@ class CodeEntry {
             }
         });
     }
-    
+
     addKey(key) {
         this.enteredCode.push(key);
         this.updateDisplay();
-        
+
         // Check if code is complete
         if (this.enteredCode.length === this.konamiCode.length) {
             if (this.checkCode()) {
@@ -333,16 +332,16 @@ class CodeEntry {
             this.resetCode();
         }
     }
-    
+
     updateDisplay() {
         const display = document.getElementById('code-display');
         const status = document.getElementById('code-status');
-        
+
         let displayText = '';
         for (let i = 0; i < this.konamiCode.length; i++) {
             if (i < this.enteredCode.length) {
                 const key = this.enteredCode[i];
-                switch(key) {
+                switch (key) {
                     case 'ArrowUp': displayText += '↑'; break;
                     case 'ArrowDown': displayText += '↓'; break;
                     case 'ArrowLeft': displayText += '←'; break;
@@ -354,9 +353,9 @@ class CodeEntry {
             }
             if (i < this.konamiCode.length - 1) displayText += ' ';
         }
-        
+
         display.textContent = displayText;
-        
+
         // Update status
         if (this.enteredCode.length === 0) {
             status.textContent = '';
@@ -366,39 +365,39 @@ class CodeEntry {
             status.className = 'mt-4 text-sm font-bold text-blue-600';
         }
     }
-    
+
     checkCode() {
         return this.enteredCode.every((key, index) => key === this.konamiCode[index]);
     }
-    
+
     unlockQuiz() {
         const status = document.getElementById('code-status');
         status.textContent = '🎉 CODE ACCEPTED! Unlocking Ancient Dragon Oracle...';
         status.className = 'mt-4 text-sm font-bold text-green-600';
-        
+
         setTimeout(() => {
             // Show the dragon quiz header
             const header = document.getElementById('dragon-quiz-header');
             if (header) {
                 header.classList.remove('hidden');
             }
-            
+
             // Hide code entry and show quiz start
             document.getElementById('code-entry').classList.add('hidden');
             document.getElementById('quiz-start').classList.remove('hidden');
         }, 1500);
     }
-    
+
     showError() {
         this.attemptCount++;
         const status = document.getElementById('code-status');
         const hintElement = document.querySelector('.hint-container');
-        
+
         if (this.attemptCount >= 3) {
             // Show the actual Konami code hint after 3 attempts
             status.textContent = '💡 Hint: Try the legendary Konami code! ↑↑↓↓←→←→BA';
             status.className = 'mt-4 text-sm font-bold text-blue-600';
-            
+
             // Show the Konami code hint below the existing poetic hint
             if (hintElement) {
                 hintElement.innerHTML = `
@@ -418,12 +417,12 @@ class CodeEntry {
             status.textContent = '❌ Invalid code! Try again...';
             status.className = 'mt-4 text-sm font-bold text-red-600';
         }
-        
+
         setTimeout(() => {
             this.resetCode();
         }, 2000);
     }
-    
+
     resetCode() {
         this.enteredCode = [];
         this.updateDisplay();
@@ -491,7 +490,7 @@ class DragonQuiz {
                 ]
             }
         ];
-        
+
         this.dragons = [
             {
                 name: "Vyraxion — The Ember Tyrant",
@@ -714,28 +713,28 @@ class DragonQuiz {
                 image: "Lysariel — The Celestial Oracle.jpg"
             }
         ];
-        
+
         this.init();
     }
-    
+
     init() {
         this.bindEvents();
     }
-    
+
     bindEvents() {
         const startBtn = document.getElementById('start-quiz-btn');
         const nextBtn = document.getElementById('next-question');
         const prevBtn = document.getElementById('prev-question');
         const retakeBtn = document.getElementById('retake-quiz');
         const shareBtn = document.getElementById('share-result');
-        
+
         if (startBtn) startBtn.addEventListener('click', () => this.startQuiz());
         if (nextBtn) nextBtn.addEventListener('click', () => this.nextQuestion());
         if (prevBtn) prevBtn.addEventListener('click', () => this.prevQuestion());
         if (retakeBtn) retakeBtn.addEventListener('click', () => this.resetQuiz());
         if (shareBtn) shareBtn.addEventListener('click', () => this.shareResult());
     }
-    
+
     startQuiz() {
         document.getElementById('quiz-start').classList.add('hidden');
         document.getElementById('quiz-questions').classList.remove('hidden');
@@ -743,7 +742,7 @@ class DragonQuiz {
         this.answers = [];
         this.showQuestion();
     }
-    
+
     showQuestion() {
         const question = this.questions[this.currentQuestion];
         const questionText = document.getElementById('question-text');
@@ -752,14 +751,14 @@ class DragonQuiz {
         const optionsContainer = document.getElementById('question-options');
         const prevBtn = document.getElementById('prev-question');
         const nextBtn = document.getElementById('next-question');
-        
+
         questionText.textContent = question.text;
         questionNumber.textContent = `Question ${this.currentQuestion + 1} of 6`;
         progressBar.style.width = `${((this.currentQuestion + 1) / 6) * 100}%`;
-        
+
         // Clear previous options
         optionsContainer.innerHTML = '';
-        
+
         // Create option buttons
         question.options.forEach((option, index) => {
             const optionBtn = document.createElement('button');
@@ -768,34 +767,34 @@ class DragonQuiz {
             optionBtn.addEventListener('click', () => this.selectOption(index));
             optionsContainer.appendChild(optionBtn);
         });
-        
+
         // Update navigation buttons
         prevBtn.classList.toggle('hidden', this.currentQuestion === 0);
         nextBtn.classList.toggle('hidden', this.answers[this.currentQuestion] === undefined);
         nextBtn.disabled = this.answers[this.currentQuestion] === undefined;
     }
-    
+
     selectOption(optionIndex) {
         // Remove previous selection
         document.querySelectorAll('#question-options button').forEach(btn => {
             btn.classList.remove('border-purple-500', 'bg-purple-50');
             btn.classList.add('border-gray-300');
         });
-        
+
         // Add selection to clicked option
         const selectedBtn = document.querySelectorAll('#question-options button')[optionIndex];
         selectedBtn.classList.remove('border-gray-300');
         selectedBtn.classList.add('border-purple-500', 'bg-purple-50');
-        
+
         // Store answer
         this.answers[this.currentQuestion] = optionIndex;
-        
+
         // Enable next button
         const nextBtn = document.getElementById('next-question');
         nextBtn.classList.remove('hidden');
         nextBtn.disabled = false;
     }
-    
+
     nextQuestion() {
         if (this.currentQuestion < this.questions.length - 1) {
             this.currentQuestion++;
@@ -804,28 +803,28 @@ class DragonQuiz {
             this.showResults();
         }
     }
-    
+
     prevQuestion() {
         if (this.currentQuestion > 0) {
             this.currentQuestion--;
             this.showQuestion();
         }
     }
-    
+
     showResults() {
         console.log('Showing results...'); // Debug log
         document.getElementById('quiz-questions').classList.add('hidden');
         document.getElementById('quiz-results').classList.remove('hidden');
-        
+
         const dragon = this.calculateResult();
         console.log('Calculated dragon:', dragon); // Debug log
         this.displayDragon(dragon);
     }
-    
+
     calculateResult() {
         // Count dragon preferences from answers
         const dragonCounts = {};
-        
+
         this.answers.forEach((answerIndex, questionIndex) => {
             const selectedOption = this.questions[questionIndex].options[answerIndex];
             if (selectedOption && selectedOption.dragons) {
@@ -834,13 +833,13 @@ class DragonQuiz {
                 });
             }
         });
-        
+
         console.log('Dragon counts:', dragonCounts); // Debug log
-        
+
         // Find dragon with highest score
         let bestMatch = this.dragons[0];
         let bestScore = 0;
-        
+
         this.dragons.forEach(dragon => {
             const dragonName = dragon.name.split(' — ')[0]; // Get just the name part
             const score = dragonCounts[dragonName] || 0;
@@ -850,11 +849,11 @@ class DragonQuiz {
                 bestMatch = dragon;
             }
         });
-        
+
         console.log('Best match:', bestMatch.name, 'Score:', bestScore); // Debug log
         return bestMatch;
     }
-    
+
     displayDragon(dragon) {
         const dragonEmojiEl = document.getElementById('dragon-emoji');
         if (dragon.image) {
@@ -863,21 +862,21 @@ class DragonQuiz {
         } else {
             dragonEmojiEl.textContent = dragon.emoji;
         }
-        
+
         document.getElementById('dragon-name').textContent = dragon.name;
         document.getElementById('dragon-element').textContent = dragon.element;
         document.getElementById('dragon-origin').textContent = dragon.origin;
         document.getElementById('dragon-appearance').textContent = dragon.appearance;
         document.getElementById('dragon-abilities').textContent = dragon.abilities;
-        
+
         // Display stats
         const statsContainer = document.getElementById('dragon-stats');
         statsContainer.innerHTML = '';
-        
-            Object.entries(dragon.stats).forEach(([stat, value]) => {
-                const statDiv = document.createElement('div');
-                statDiv.className = 'flex justify-between items-center mb-3';
-                statDiv.innerHTML = `
+
+        Object.entries(dragon.stats).forEach(([stat, value]) => {
+            const statDiv = document.createElement('div');
+            statDiv.className = 'flex justify-between items-center mb-3';
+            statDiv.innerHTML = `
                     <span class="text-base font-bold text-black">${stat}:</span>
                     <div class="flex items-center">
                         <div class="w-32 bg-gray-300 rounded-full h-3 mr-3">
@@ -886,21 +885,21 @@ class DragonQuiz {
                         <span class="text-base font-bold text-black min-w-[40px]">${value}/10</span>
                     </div>
                 `;
-                statsContainer.appendChild(statDiv);
-            });
+            statsContainer.appendChild(statDiv);
+        });
     }
-    
+
     resetQuiz() {
         document.getElementById('quiz-results').classList.add('hidden');
         document.getElementById('quiz-start').classList.remove('hidden');
         this.currentQuestion = 0;
         this.answers = [];
     }
-    
+
     shareResult() {
         const dragon = this.calculateResult();
         const shareText = `I just discovered my dragon companion: ${dragon.name}! Take the quiz at your portfolio to find yours! 🐉`;
-        
+
         if (navigator.share) {
             navigator.share({
                 title: 'My Dragon Quiz Result',
@@ -921,16 +920,16 @@ document.addEventListener('DOMContentLoaded', () => {
     new GuestBook();
     new CodeEntry(); // Initialize the Code Entry system
     new DragonQuiz();
-    
+
     // Mobile menu functionality
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
-    
+
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
-        
+
         // Close mobile menu when clicking on a link
         mobileMenu.querySelectorAll('a').forEach(link => {
             link.addEventListener('click', () => {
@@ -938,7 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-    
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
